@@ -1,7 +1,5 @@
-# Hardening Modules
-
 > [!NOTE]
-> Phase 2 Modules (SSH & Firewall) are active. Subsequent modules are planned for future phases.
+> Phase 3 Modules (SSH, Firewall, Sysctl, Fail2Ban, Auditd) are active. Subsequent modules are planned for future phases.
 
 ## 1. SSH Security (`02-ssh.sh`)
 This module safely applies baseline security controls to the OpenSSH server (`sshd_config`).
@@ -31,3 +29,28 @@ This module configures `ufw` to enforce a secure baseline while ensuring the adm
 ### Safety Mechanisms:
 - **Port Detection:** The script uses `sshd -T` to discover the exact port currently configured for SSH, guaranteeing it isn't blocked.
 - **Verification:** Runs `ufw status` to verify the port was successfully allowed after enablement.
+
+## 3. Sysctl Kernel/Network Hardening (`04-sysctl.sh`)
+This module fortifies the Linux kernel against network-based attacks.
+
+### Applied Controls:
+- **TCP SYN Cookies:** Enabled (`net.ipv4.tcp_syncookies = 1`) to mitigate SYN flood DoS attacks.
+- **IP Forwarding:** Disabled to ensure the server cannot be used as a router.
+- **ICMP Redirects:** Ignored to prevent routing manipulation.
+- **Source Routing:** Disabled.
+- **Martian Packets:** Logging enabled for spoofed/unroutable packets.
+
+## 4. Fail2Ban Intrusion Prevention (`05-fail2ban.sh`)
+This module dynamically bans IP addresses that show malicious signs, such as too many password failures.
+
+### Applied Controls:
+- **SSH Jail:** Activates the `sshd` jail.
+- **Ban Policy:** Bans IPs for 1 hour after 5 failed login attempts within 10 minutes.
+
+## 5. Auditd System Auditing (`06-auditd.sh`)
+This module deploys kernel-level auditing to track who modified what.
+
+### Applied Controls:
+- **Identity Files:** Monitors `/etc/passwd`, `/etc/shadow`, and `/etc/group` for any write/attribute changes.
+- **Privilege Escalation:** Monitors `/etc/sudoers` and `/etc/sudoers.d/`.
+- **Configuration Security:** Monitors SSH (`/etc/ssh/sshd_config`) and PAM (`/etc/pam.d/`) configs for unauthorized modifications.

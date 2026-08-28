@@ -19,14 +19,16 @@
 
 
 > [!CAUTION]
-> **DEVELOPMENT STATUS**: This project is currently in **Phase 2** of transformation into an automated framework. 
-> The SSH and Firewall (UFW) hardening modules are active and ready for use.
+> **DEVELOPMENT STATUS**: This project has completed **Phase 4** of its transformation into an automated framework!
+> All modules (SSH, Firewall, Sysctl, Fail2Ban, Auditd, and Lynis) are active, tested, and ready for production use.
 
 ## 📌 Project Purpose
 
 The **Linux Server Security Hardening & Continuous Security Audit Framework** is designed to provide an automated, idempotent, and safe method for securing Linux servers. It enforces industry standards (like CIS Benchmarks) while prioritizing administrator safety through automated backups, dry-run modes, and strict system validations.
 
-## 🎯 Current Capabilities (Phase 2)
+## 🎯 Current Capabilities (Phase 4 Final)
+- **Automated Security Scoring**: Runs Lynis automatically to generate a Hardening Index score and saves comprehensive audit reports.
+- **Advanced Security**: Sysctl network hardening, Fail2Ban dynamic bans, and Auditd kernel-level monitoring.
 - **SSH Hardening**: Idempotently enforces key-based auth, disables root login, and validates configurations using `sshd -t` before restarting.
 - **Firewall Hardening**: Configures UFW with default deny policies while dynamically detecting and rate-limiting the active SSH port to prevent lockouts.
 - **System Detection**: Safely detects OS, version, kernel, and network stats.
@@ -71,8 +73,8 @@ Testing is currently conducted on isolated **Ubuntu Server** and **Kali Linux** 
 ## 🗺 Roadmap
 - **Phase 1 (Complete):** Core Automation & Safety Foundation.
 - **Phase 2 (Complete):** Modular Hardening Implementation (SSH, UFW).
-- **Phase 3 (Next):** Advanced Security (Sysctl, Fail2Ban, Auditd).
-- **Phase 4:** Automated Security Scoring & Reporting.
+- **Phase 3 (Complete):** Advanced Security (Sysctl, Fail2Ban, Auditd).
+- **Phase 4 (Complete):** Automated Security Scoring & Reporting.
 
 ---
 
@@ -85,6 +87,23 @@ Server hardening means protecting your Linux server by reducing its vulnerabilit
 ## Why It Matters?
 Even though Linux is considered more secure than many other operating systems, it’s not immune to attacks. Poor configurations, outdated software, or weak passwords can make your server an easy target.
 
+## 📸 Execution Demonstration
+
+The following screenshots demonstrate the framework successfully analyzing, backing up, and hardening the server across all 4 phases:
+
+![Execution Step 1](images/execution-step-1.png)
+![Execution Step 2](images/execution-step-2.png)
+![Execution Step 3](images/execution-step-3.png)
+![Execution Step 4](images/execution-step-4.png)
+![Execution Step 5](images/execution-step-5.png)
+![Execution Step 6](images/execution-step-6.png)
+![Execution Step 7](images/execution-step-7.png)
+
+## Disclaimer
+This script is provided for educational and administrative purposes. Ensure you have tested this in a staging environment prior to running on production systems. The developers are not responsible for accidental system lockouts.
+
+## License
+MIT License
 
 ## 1️⃣ Review Default System Settings
 Understand the system before making changes.

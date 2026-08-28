@@ -15,7 +15,7 @@ usage() {
     echo "Options:"
     echo "  -d, --dry-run      Simulate hardening without making changes"
     echo "  -i, --info         Display system information and exit"
-    echo "  -m, --module <mod> Run specific module (ssh, firewall, all)"
+    echo "  -m, --module <mod> Run specific module (ssh, firewall, sysctl, fail2ban, auditd, lynis, all)"
     echo "  -h, --help         Show this help message"
     exit 0
 }
@@ -82,7 +82,6 @@ run_module() {
     
     if [[ -f "$script" ]]; then
         log_info "Executing module: $mod"
-        # Export BACKUP_SESSION_DIR and IS_DRY_RUN are already in environment
         bash "$script"
     else
         log_warn "Module '$mod' not found at $script."
@@ -96,12 +95,28 @@ case "$TARGET_MODULE" in
     firewall)
         run_module "03-firewall"
         ;;
+    sysctl)
+        run_module "04-sysctl"
+        ;;
+    fail2ban)
+        run_module "05-fail2ban"
+        ;;
+    auditd)
+        run_module "06-auditd"
+        ;;
+    lynis)
+        run_module "07-lynis"
+        ;;
     all)
         run_module "02-ssh"
         run_module "03-firewall"
+        run_module "04-sysctl"
+        run_module "05-fail2ban"
+        run_module "06-auditd"
+        run_module "07-lynis"
         ;;
     *)
-        log_error "Unknown module: $TARGET_MODULE. Available: ssh, firewall, all"
+        log_error "Unknown module: $TARGET_MODULE. Available: ssh, firewall, sysctl, fail2ban, auditd, lynis, all"
         exit 1
         ;;
 esac

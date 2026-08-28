@@ -38,7 +38,7 @@ if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
     echo "Note: Dry-run test requires root to fully pass execution logic (root check enforced)."
 else
     if "$H_SCRIPT" --module all --dry-run | grep -q "Would reload/restart"; then
-        echo "PASS: Dry-run mode completed successfully."
+        echo "PASS: Dry-run mode completed successfully for all modules."
     else
         echo "FAIL: Dry-run output not as expected."
         exit 1
