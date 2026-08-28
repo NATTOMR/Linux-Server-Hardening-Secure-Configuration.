@@ -18,51 +18,65 @@
 ---
 
 
-## 📌 Project Summary
+> [!CAUTION]
+> **DEVELOPMENT STATUS**: This project is currently in **Phase 1** of transformation into an automated framework. 
+> The core execution engine, safe backup mechanisms, and system detection are implemented. 
+> **Actual hardening modules have not yet been enabled.**
 
-This project demonstrates **practical Linux server hardening techniques** aligned with industry security standards such as **CIS Benchmarks** and the **NIST Cybersecurity Framework**.
+## 📌 Project Purpose
 
-The objective was to reduce the system’s attack surface, enforce the principle of least privilege, secure remote access, configure firewall protections, and validate security posture using auditing tools.
+The **Linux Server Security Hardening & Continuous Security Audit Framework** is designed to provide an automated, idempotent, and safe method for securing Linux servers. It enforces industry standards (like CIS Benchmarks) while prioritizing administrator safety through automated backups, dry-run modes, and strict system validations.
 
-The implementation simulates real-world system administration and blue team security practices.
+## 🎯 Current Capabilities (Phase 1)
+- **System Detection**: Safely detects OS, version, kernel, and network stats.
+- **Root & OS Validation**: Strictly ensures the script is run securely on supported OSs (Ubuntu, Debian, Kali).
+- **Atomic Backups**: Infrastructure to create timestamped backups of configuration files before any modifications.
+- **Dry-Run Mode**: Simulates actions without altering the system.
+- **Centralized Logging**: Detailed, severity-based logging mechanism.
+- **Read-Only Auditing**: Gathers system baselines and security statuses without making changes.
+
+## 🏗 Architecture
+- `scripts/harden.sh` - Main framework orchestration.
+- `scripts/lib/` - Reusable functions (logging, validation, backups).
+- `scripts/audit.sh` - Generates security baselines.
+- `docs/` - Detailed documentation (Architecture, Installation, Usage, etc.).
+
+## 🚀 Installation & Usage
+
+### 1. Clone & Prepare
+```bash
+git clone https://github.com/NATTOMR/Linux-Server-Hardening-Secure-Configuration.git
+cd Linux-Server-Hardening-Secure-Configuration
+chmod +x scripts/*.sh scripts/lib/*.sh
+```
+
+### 2. Check System Info
+```bash
+./scripts/system-info.sh
+```
+
+### 3. Run Dry-Run (Simulation)
+```bash
+sudo ./scripts/harden.sh --dry-run
+```
+
+### 4. Create Security Baseline
+```bash
+sudo ./scripts/audit.sh
+```
+
+## 🧪 Testing Environment
+Testing is currently conducted on isolated **Ubuntu Server** and **Kali Linux** virtual machines. The scripts use `set -Eeuo pipefail` to ensure robust error handling.
+
+## 🗺 Roadmap
+- **Phase 1 (Complete):** Core Automation & Safety Foundation.
+- **Phase 2 (Next):** Modular Hardening Implementation (SSH, UFW, Sysctl).
+- **Phase 3:** Advanced Security (Fail2Ban, Auditd).
+- **Phase 4:** Automated Security Scoring & Reporting.
 
 ---
 
-## 🎯 Project Contents
-- Secure a Linux system against common attacks
-- Minimize exposed services and open ports
-- Enforce strong authentication and access control
-- Apply firewall rules and system updates
-- Monitor logs for suspicious activity
-
----
-
-## 🛠 Tools & Environment
-**Primary OS**
-- Kali Linux / Ubuntu Server
-
-** Security Tools**
-- UFW (Firewall)
-- OpenSSH
-- Lynis (Security Auditing)
-- CIS Benchmarks (Reference)
-
----
-
-## 🧭 Project Scope
-This project covers:
-- User and permission hardening
-- SSH security
-- Firewall configuration
-- Service minimization
-- File permission security
-- System updates
-- Log monitoring
-- Security auditing
-
----
-
-## 🔍 Step-by-Step Implementation
+## 🔍 Legacy Manual Implementation Reference (Pre-Automation)
 
 ---
 ## What Is Server Hardening?

@@ -1,0 +1,12 @@
+# Logs
+/logs/
+*.log
+
+# Backups
+/backups/
+
+# Audit Reports (Optional, but generally good to exclude runtime baselines)
+/audit/baselines/*
+!/audit/baselines/.gitkeep
+/audit/reports/*
+!/audit/reports/.gitkeep
