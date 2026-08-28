@@ -17,19 +17,33 @@ if [[ ! -f "$H_SCRIPT" ]]; then
 fi
 echo "PASS: Scripts exist."
 
-# Test 2: Test dry-run mode parsing
-if ! "$H_SCRIPT" --dry-run | grep -q "Dry-run mode enabled"; then
-    # Since we need root for harden.sh, this might fail if not root.
-    # But it fails safely.
-    echo "Note: Dry-run test requires root to fully pass, or we handle root check first."
-fi
-
-# Test 3: Test System Info runs without arguments
+# Test 2: Test system-info script
 if ! "$SYS_SCRIPT" >/dev/null; then
     echo "FAIL: system-info.sh failed to execute."
     exit 1
 fi
 echo "PASS: system-info.sh executed successfully."
+
+# Test 3: Test module parameter requirements
+if "$H_SCRIPT" >/dev/null 2>&1; then
+    echo "FAIL: harden.sh should fail when run without --module."
+    exit 1
+fi
+echo "PASS: Module flag requirement enforced."
+
+# Test 4: Dry-run mode for all modules
+echo "Running dry-run simulation for all modules..."
+# We wrap in subshell or handle error if we are not root
+if [[ "${EUID:-$(id -u)}" -ne 0 ]]; then
+    echo "Note: Dry-run test requires root to fully pass execution logic (root check enforced)."
+else
+    if "$H_SCRIPT" --module all --dry-run | grep -q "Would reload/restart"; then
+        echo "PASS: Dry-run mode completed successfully."
+    else
+        echo "FAIL: Dry-run output not as expected."
+        exit 1
+    fi
+fi
 
 echo "All basic framework tests passed."
 exit 0

@@ -19,20 +19,20 @@
 
 
 > [!CAUTION]
-> **DEVELOPMENT STATUS**: This project is currently in **Phase 1** of transformation into an automated framework. 
-> The core execution engine, safe backup mechanisms, and system detection are implemented. 
-> **Actual hardening modules have not yet been enabled.**
+> **DEVELOPMENT STATUS**: This project is currently in **Phase 2** of transformation into an automated framework. 
+> The SSH and Firewall (UFW) hardening modules are active and ready for use.
 
 ## 📌 Project Purpose
 
 The **Linux Server Security Hardening & Continuous Security Audit Framework** is designed to provide an automated, idempotent, and safe method for securing Linux servers. It enforces industry standards (like CIS Benchmarks) while prioritizing administrator safety through automated backups, dry-run modes, and strict system validations.
 
-## 🎯 Current Capabilities (Phase 1)
+## 🎯 Current Capabilities (Phase 2)
+- **SSH Hardening**: Idempotently enforces key-based auth, disables root login, and validates configurations using `sshd -t` before restarting.
+- **Firewall Hardening**: Configures UFW with default deny policies while dynamically detecting and rate-limiting the active SSH port to prevent lockouts.
 - **System Detection**: Safely detects OS, version, kernel, and network stats.
 - **Root & OS Validation**: Strictly ensures the script is run securely on supported OSs (Ubuntu, Debian, Kali).
-- **Atomic Backups**: Infrastructure to create timestamped backups of configuration files before any modifications.
+- **Atomic Backups**: Infrastructure creates timestamped backups of configuration files before any modifications.
 - **Dry-Run Mode**: Simulates actions without altering the system.
-- **Centralized Logging**: Detailed, severity-based logging mechanism.
 - **Read-Only Auditing**: Gathers system baselines and security statuses without making changes.
 
 ## 🏗 Architecture
@@ -70,8 +70,8 @@ Testing is currently conducted on isolated **Ubuntu Server** and **Kali Linux** 
 
 ## 🗺 Roadmap
 - **Phase 1 (Complete):** Core Automation & Safety Foundation.
-- **Phase 2 (Next):** Modular Hardening Implementation (SSH, UFW, Sysctl).
-- **Phase 3:** Advanced Security (Fail2Ban, Auditd).
+- **Phase 2 (Complete):** Modular Hardening Implementation (SSH, UFW).
+- **Phase 3 (Next):** Advanced Security (Sysctl, Fail2Ban, Auditd).
 - **Phase 4:** Automated Security Scoring & Reporting.
 
 ---

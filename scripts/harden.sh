@@ -13,13 +13,15 @@ source "${SCRIPT_DIR}/lib/validation.sh"
 usage() {
     echo "Usage: sudo $0 [OPTIONS]"
     echo "Options:"
-    echo "  -d, --dry-run    Simulate hardening without making changes"
-    echo "  -i, --info       Display system information and exit"
-    echo "  -h, --help       Show this help message"
+    echo "  -d, --dry-run      Simulate hardening without making changes"
+    echo "  -i, --info         Display system information and exit"
+    echo "  -m, --module <mod> Run specific module (ssh, firewall, all)"
+    echo "  -h, --help         Show this help message"
     exit 0
 }
 
 MODE="harden"
+TARGET_MODULE="none"
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -32,6 +34,10 @@ while [[ "$#" -gt 0 ]]; do
             MODE="info"
             shift
             ;;
+        -m|--module)
+            TARGET_MODULE="$2"
+            shift 2
+            ;;
         -h|--help)
             usage
             ;;
@@ -42,7 +48,6 @@ while [[ "$#" -gt 0 ]]; do
     esac
 done
 
-# Execute based on mode
 if [[ "$MODE" == "info" ]]; then
     "${SCRIPT_DIR}/system-info.sh"
     exit 0
@@ -52,25 +57,55 @@ echo "=================================================="
 echo "       LINUX SERVER HARDENING FRAMEWORK"
 echo "=================================================="
 
+if [[ "$TARGET_MODULE" == "none" ]]; then
+    log_error "You must specify a module to run. Use '--module all' or '--help'."
+    exit 1
+fi
+
 log_info "Starting hardening framework initialization..."
-
-# 1. Validate Environment & 3. Check Privileges
 check_root
-
-# 2. Detect OS
 detect_os
 
-# 4. Initialize Backup Framework (only if not dry-run, though we could just mock it)
 if [[ "$IS_DRY_RUN" == "true" ]]; then
     log_dry_run "Would initialize backup session for configuration files."
 else
     init_backup_session
-    # Define files we would backup, but don't backup yet in Phase 1
     log_info "Backup framework initialized. Ready for module execution."
 fi
 
 echo ""
-log_warn "Phase 1 limits: Hardening modules are not yet enabled."
-log_info "Framework initialized safely. Exiting."
 
+# Module Orchestration
+run_module() {
+    local mod="$1"
+    local script="${SCRIPT_DIR}/modules/${mod}.sh"
+    
+    if [[ -f "$script" ]]; then
+        log_info "Executing module: $mod"
+        # Export BACKUP_SESSION_DIR and IS_DRY_RUN are already in environment
+        bash "$script"
+    else
+        log_warn "Module '$mod' not found at $script."
+    fi
+}
+
+case "$TARGET_MODULE" in
+    ssh)
+        run_module "02-ssh"
+        ;;
+    firewall)
+        run_module "03-firewall"
+        ;;
+    all)
+        run_module "02-ssh"
+        run_module "03-firewall"
+        ;;
+    *)
+        log_error "Unknown module: $TARGET_MODULE. Available: ssh, firewall, all"
+        exit 1
+        ;;
+esac
+
+echo ""
+log_success "Hardening framework execution complete."
 exit 0
