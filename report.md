@@ -9,6 +9,8 @@
 
 ### 1. Executive Summary
 
+![Project Banner](images/banner.png)
+
 The **Linux Server Hardening & Secure Configuration** project has been successfully transformed from a static documentation repository into a fully automated, idempotent, and production-ready DevSecOps framework. This framework systematically applies security baseline controls across critical OS subsystems while ensuring strict administrative safety, automated configuration backups, and built-in diagnostic auditing.
 
 ### 2. Architecture & Design Principles
@@ -26,7 +28,12 @@ Established the central framework (`harden.sh`), logging library, and backup eng
 
 #### Phase 2: Access & Perimeter Security
 - **OpenSSH Server (`02-ssh.sh`)**: Enforced key-based authentication (`PubkeyAuthentication yes`), disabled root login, and denied empty passwords. Safely disabled password authentication only after successfully verifying the existence of `authorized_keys`.
+  
+  ![SSH Configuration](images/ssh%20configuration.png)
+
 - **Uncomplicated Firewall (`03-firewall.sh`)**: Established default deny routing/incoming policies. Dynamically detected the active SSH port to rate-limit and allow it explicitly, ensuring the administrator is never locked out.
+  
+  ![UFW Configuration](images/configure%20UFW.png)
 
 #### Phase 3: Advanced Defense
 - **Kernel & Network (`04-sysctl.sh`)**: Hardened the IPv4/IPv6 stacks by disabling IP forwarding, disabling source routing, ignoring ICMP redirects, and enabling TCP SYN cookies to mitigate DoS attacks.
@@ -35,6 +42,9 @@ Established the central framework (`harden.sh`), logging library, and backup eng
 
 #### Phase 4: Automated Security Scoring
 - **Lynis Integration (`07-lynis.sh`)**: Integrated the Lynis auditing engine to dynamically score the system after hardening, parsing the official **Hardening Index** and logging comprehensive `.dat` audit reports into the `audit/reports/` directory.
+
+  ![Lynis Audit 1](images/Lynis-1.png)
+  ![Lynis Audit 2](images/Lynis-2.png)
 
 ### 4. Testing & Validation
 
